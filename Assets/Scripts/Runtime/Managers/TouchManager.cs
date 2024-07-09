@@ -7,13 +7,13 @@ using UnityEngineInternal;
 
 public static class TouchEvents
 {
-    public static Action <ITouchable>OnElementTapped;
+    public static Action<ITouchable> OnElementTapped;
     public static Action OnEmptyTapped;
 }
 
 public interface ITouchable
 {
-    GameObject gameobject { get; }
+    GameObject gameObject { get; }
 }
 
 public class TouchManager : MonoBehaviour
