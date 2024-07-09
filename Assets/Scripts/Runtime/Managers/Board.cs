@@ -10,13 +10,21 @@ public class Board : MonoBehaviour
     [Header("Scene Dependency")]
     [SerializeField] Transform tileParent; //Tile'ýn spawnlanacaðý parent'ý.
 
-    /*Tile instantiate yapýldýktan sonra tutulacaðý için bir array olþturuyoruz. Daha sonra bu listeye ulaþabilmek gerekecek. Bu yüzdne dýþarýdan okunabilir ama deðiþtirilemez olarak ayarlamamýz gerekiyor. 
-     * Bunu get ve set ile yapýyoruz.*/
+    public Tile[] Tiles { get; private set; } //Tile instantiate yapýldýktan sonra tutulacaðý için bir array olþturuyoruz. Daha sonra bu listeye ulaþabilmek gerekecek. Bu yüzdne dýþarýdan okunabilir ama deðiþtirilemez olarak ayarlamamýz gerekiyor. Bunu get ve set ile yapýyoruz.
 
-    public Tile[] Tiles { get; private set; }
+    private void Awake()
+    {
+        TouchEvents.OnElementTapped += TileTapped;
+        PrepareTiles();
+    }
+
+    void OnDestroy()
+    {
+        TouchEvents.OnElementTapped -= TileTapped;
+    }
 
 
-    void PrepareTile()
+    void PrepareTiles()
     {
         var tileCount = 5;
         Tiles = new Tile[tileCount]; //TODO: Change with level tile amount
@@ -25,6 +33,11 @@ public class Board : MonoBehaviour
         {
             Tiles[i] = Instantiate(tilePrefab, tileParent);
         }
+    }
+
+    void TileTapped(ITouchable touchable)
+    {
+        var tappedTile = touchable.gameobject.GetComponent<Tile>();
     }
     
 }

@@ -13,22 +13,19 @@ public static class TouchEvents
 
 public interface ITouchable
 {
-
+    GameObject gameobject { get; }
 }
 
 public class TouchManager : MonoBehaviour
 {
     [SerializeField] Camera cam;
-    [SerializeField] string collisionTag;
+
     bool _canTouch;
 
     private void Start()
     {
         _canTouch = false;
     }
-
-    
-
 
     private void Update()
     {
@@ -38,29 +35,34 @@ public class TouchManager : MonoBehaviour
         }
     }
 
-    private void GetTouch(Vector3 pos)
+    void GetTouch(Vector3 pos)
     {
         if (Input.GetMouseButtonDown(0))
         {
             var hit = Physics2D.OverlapPoint(cam.ScreenToWorldPoint(pos));
 
             if (CanTouch(hit))
+            {             
+                if (hit.gameObject.TryGetComponent(out ITouchable selectedElement))
+                {
+                    TouchEvents.OnElementTapped?.Invoke(selectedElement);
+                }
+            }
+            else
             {
-                //var selectedCard = hit.gameObject.GetComponent<Card>();
-                
+                TouchEvents.OnEmptyTapped?.Invoke();
             }
         }
     }
 
     bool CanTouch(Collider2D hit)
     {
-        return hit != null && hit.CompareTag(collisionTag);
+        return hit != null;
     }
 
     IEnumerator WaitForTouch_Cor()
     {
         yield return new WaitForSeconds(1.5f);
-
         _canTouch = true;
     }
 
