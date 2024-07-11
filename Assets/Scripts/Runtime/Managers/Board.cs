@@ -37,7 +37,7 @@ public class Board : MonoBehaviour
 
     void TileTapped(ITouchable touchable)
     {
-        var tappedTile = touchable.gameobject.GetComponent<Tile>();
+        var tappedTile = touchable.gameObject.GetComponent<Tile>();
     }
     
 }
