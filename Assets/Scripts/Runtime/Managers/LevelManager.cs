@@ -5,10 +5,12 @@ public class LevelManager : MonoBehaviour
     [SerializeField] TextAsset[] levelFiles;
 
     LevelData[] _levelData;
+    LevelSaveData _levelSaveData;
 
     private void Awake()
     {
-        ReadLevels();   
+        ReadLevels();
+        Load();
     }
 
     void ReadLevels()
@@ -18,6 +20,31 @@ public class LevelManager : MonoBehaviour
         for (int i = 0; i < levelFiles.Length; i++)
         {
             _levelData[i] = JsonUtility.FromJson<LevelData>(levelFiles[i].text);
+        }
+    }
+
+    void Load()
+    {
+        if (DataHandler.HasData(DataKeys.LevelScoreDataKey))
+        {
+            _levelSaveData = DataHandler.Load<LevelSaveData>(DataKeys.LevelScoreDataKey);
+        }
+        else
+        {
+            _levelSaveData = new LevelSaveData(new LevelScoresData[_levelData.Length]);
+
+            for (int i = 0; i < _levelData.Length; i++)
+            {
+                _levelSaveData.Data[i].index = i;
+                _levelSaveData.Data[i].title = _levelData[i].title;
+                _levelSaveData.Data[i].highScore = 0;
+                _levelSaveData.Data[i].isUnlocked = false;
+            }
+
+            _levelSaveData.Data[0].isUnlocked = true;
+            _levelSaveData.Data[0].highScore = 0;
+
+            DataHandler.Save(_levelSaveData, DataKeys.LevelScoreDataKey);
         }
     }
 }
