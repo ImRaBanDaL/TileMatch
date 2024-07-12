@@ -34,7 +34,7 @@ public class LevelsButton : MonoBehaviour
 
     void OnClick()
     {
-
+        UIEvents.OpenLevelsPanel?.Invoke();
     }
 
 
