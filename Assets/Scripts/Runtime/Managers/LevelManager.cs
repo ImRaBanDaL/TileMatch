@@ -8,7 +8,7 @@ public class LevelManager : MonoBehaviour
 
     private void Awake()
     {
-        ReadLevels();
+        ReadLevels();   
     }
 
     void ReadLevels()
